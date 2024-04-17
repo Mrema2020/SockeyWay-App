@@ -51,8 +51,8 @@ class LoadingIndicator extends StatelessWidget {
         mainAxisSize: MainAxisSize.min,
         children: [
           _getLoadingIndicator(),
-          _getHeading(context),
           _getText(displayedText),
+          _getHeading(context),
         ],
       ),
     );
@@ -73,10 +73,10 @@ class LoadingIndicator extends StatelessWidget {
   }
 
   Widget _getHeading(context) {
-    return  Padding(
+    return  const Padding(
       padding: EdgeInsets.only(bottom: 4),
       child: Text(
-        'please_wait',
+        'Please wait',
         style: TextStyle(
           color: Colors.white70,
           fontSize: 16,

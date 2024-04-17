@@ -46,7 +46,10 @@ class _SplashScreenState extends State<SplashScreen> {
     appHeight = MediaQuery.of(context).size.height;
     appWidth = MediaQuery.of(context).size.width;
     return AnnotatedRegion<SystemUiOverlayStyle>(
-        value: SystemUiOverlayStyle.dark,
+        value: const SystemUiOverlayStyle(
+            statusBarColor: Colors.white,
+            statusBarIconBrightness: Brightness.dark
+        ),
         child: Scaffold(
           backgroundColor: Colors.white,
           resizeToAvoidBottomInset: false,
