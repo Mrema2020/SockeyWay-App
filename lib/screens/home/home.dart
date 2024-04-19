@@ -575,7 +575,6 @@ class _HomePageState extends State<HomePage> {
   }
 
   _validate(postId){
-    print("Post Id = $postId");
     if(_commentController.text.trim() == ""){
       Flushbar(
         title: "Error",
