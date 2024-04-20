@@ -33,8 +33,8 @@ class _LoginPageState extends State<LoginPage> {
 
   @override
   void initState() {
-    _emailController = TextEditingController(text: "mkuu@gmail.com");
-    _passwordController = TextEditingController(text: "123456");
+    // _emailController = TextEditingController(text: "mkuu@gmail.com");
+    // _passwordController = TextEditingController(text: "123456");
     super.initState();
   }
 
@@ -169,7 +169,8 @@ class _LoginPageState extends State<LoginPage> {
                                               CupertinoIcons.eye,
                                               size: 20,
                                               color: AppColors.primaryColor,
-                                            )),
+                                            )
+                                            ),
                                 ),
                               )),
                           SizedBox(

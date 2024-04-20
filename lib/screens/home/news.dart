@@ -107,11 +107,13 @@ class _NewsPageState extends State<NewsPage> {
                                         ),
                                       ),
                                       SizedBox(height: SizeConfig.heightMultiplier * 1),
-                                      Text(
-                                        getFirstTenWords(doc['description']),
-                                        style: TextStyle(
-                                          color: AppColors.primaryColor,
-                                          fontSize: SizeConfig.textMultiplier * 2,
+                                      Expanded(
+                                        child: Text(
+                                          getFirstTenWords(doc['description']),
+                                          style: TextStyle(
+                                            color: AppColors.primaryColor,
+                                            fontSize: SizeConfig.textMultiplier * 2,
+                                          ),
                                         ),
                                       ),
                                     ],

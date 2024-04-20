@@ -6,6 +6,7 @@ import 'package:flutter/services.dart';
 import 'package:sockeyway/firebase_options.dart';
 import 'package:sockeyway/screens/splash/splash_screen.dart';
 
+import 'api/firebase_api.dart';
 import 'utils/size_config.dart';
 
 Future<void> main() async {
@@ -14,6 +15,8 @@ Future<void> main() async {
   await Firebase.initializeApp(
     options: DefaultFirebaseOptions.currentPlatform
   );
+
+  await FirebaseApi().initNotification();
 
   await FirebaseAppCheck.instance.activate(
     androidProvider: AndroidProvider.debug,

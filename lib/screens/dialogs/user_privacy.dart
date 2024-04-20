@@ -43,8 +43,8 @@ class _TermsAndConditionsState extends State<TermsAndConditions> {
                   child: ListView(
                     children: [
                       Text(
-                        'These terms and conditions are an agreement between SMZ '
-                            'and users regarding the use of DIRA application.',
+                        'These terms and conditions are an agreement between Sockeyway '
+                            'and users regarding the use of Sockeyway application.',
                         style: TextStyle(
                           fontSize: SizeConfig.textMultiplier * 2,
                           color: Colors.black,
@@ -94,7 +94,7 @@ class _TermsAndConditionsState extends State<TermsAndConditions> {
                           ),
                           Expanded(
                             child: Text(
-                              'The App and its original content, features, and functionality are owned by SMZ and are protected by '
+                              'The App and its original content, features, and functionality are owned by Sockeyway and are protected by '
                                   'international copyright, trademark, patent, trade secret, and other intellectual property or proprietary rights laws.',
                               style: TextStyle(
                                   fontSize: SizeConfig.textMultiplier * 1.8,
@@ -210,9 +210,10 @@ class _TermsAndConditionsState extends State<TermsAndConditions> {
                       ),
                       SizedBox(height: SizeConfig.heightMultiplier * 1.5),
                       Column(
+                        crossAxisAlignment: CrossAxisAlignment.center,
                         children: [
                           Text(
-                            'Serikali Ya Mapinduzi Zanzibar (SMZ)',
+                            'Sockeyway',
                             style: TextStyle(
                                 fontSize: SizeConfig.textMultiplier * 1.5,
                                 color: Colors.black,
@@ -228,7 +229,7 @@ class _TermsAndConditionsState extends State<TermsAndConditions> {
                             ),
                           ),
                           Text(
-                            'Zanzibar, Tanzania',
+                            'Dar es Salaam, Tanzania',
                             style: TextStyle(
                                 fontSize: SizeConfig.textMultiplier * 1.5,
                                 color: Colors.black,

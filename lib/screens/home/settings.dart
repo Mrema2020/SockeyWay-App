@@ -193,84 +193,84 @@ class _SettingsPageState extends State<SettingsPage> {
                               ),
                             ),
                             Divider(color: Colors.grey.shade300),
-                            InkWell(
-                              onTap: (){},
-                              child: Container(
-                                child: Padding(
-                                  padding: const EdgeInsets.only(top: 10.0, bottom: 10),
-                                  child: Row(
-                                    mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                                    children: [
-                                      Row(
-                                        children: [
-                                          const Icon(
-                                            Icons.share,
-                                            size: 20,
-                                            color: AppColors.primaryColor,
-                                          ),
-                                          Padding(
-                                            padding: const EdgeInsets.only(left: 8.0),
-                                            child: Text(
-                                              'Tell a Friend',
-                                              style: TextStyle(
-                                                  fontSize: SizeConfig.textMultiplier * 2,
-                                                  color: AppColors.primaryColor,
-                                                  fontWeight: FontWeight.w500),
-                                            ),
-                                          ),
-                                        ],
-                                      ),
-                                      Transform.scale(
-                                          scale: 0.8,
-                                          child:  const Icon(
-                                              CupertinoIcons.forward,
-                                            color: AppColors.primaryColor,
-                                          )
-                                      ),
-                                    ],
-                                  ),
-                                ),
-                              ),
-                            ),
-                            Divider(color: Colors.grey.shade300),
-                            InkWell(
-                              onTap: (){},
-                              child: Padding(
-                                padding: const EdgeInsets.only(top: 10.0, bottom: 10),
-                                child: Row(
-                                  mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                                  children: [
-                                    Row(
-                                      children: [
-                                        const Icon(
-                                          Icons.help_outline,
-                                          size: 20,
-                                          color: AppColors.primaryColor,
-                                        ),
-                                        Padding(
-                                          padding: const EdgeInsets.only(left: 8.0),
-                                          child: Text(
-                                            'Help Center',
-                                            style: TextStyle(
-                                                fontSize: SizeConfig.textMultiplier * 2,
-                                                color: AppColors.primaryColor,
-                                                fontWeight: FontWeight.w500),
-                                          ),
-                                        ),
-                                      ],
-                                    ),
-                                    Transform.scale(
-                                        scale: 0.8,
-                                        child:  const Icon(
-                                            CupertinoIcons.forward,
-                                          color: AppColors.primaryColor,
-                                        )
-                                    ),
-                                  ],
-                                ),
-                              ),
-                            ),
-                            Divider(color: Colors.grey.shade300),
+                            // InkWell(
+                            //   onTap: (){},
+                            //   child: Container(
+                            //     child: Padding(
+                            //       padding: const EdgeInsets.only(top: 10.0, bottom: 10),
+                            //       child: Row(
+                            //         mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                            //         children: [
+                            //           Row(
+                            //             children: [
+                            //               const Icon(
+                            //                 Icons.share,
+                            //                 size: 20,
+                            //                 color: AppColors.primaryColor,
+                            //               ),
+                            //               Padding(
+                            //                 padding: const EdgeInsets.only(left: 8.0),
+                            //                 child: Text(
+                            //                   'Tell a Friend',
+                            //                   style: TextStyle(
+                            //                       fontSize: SizeConfig.textMultiplier * 2,
+                            //                       color: AppColors.primaryColor,
+                            //                       fontWeight: FontWeight.w500),
+                            //                 ),
+                            //               ),
+                            //             ],
+                            //           ),
+                            //           Transform.scale(
+                            //               scale: 0.8,
+                            //               child:  const Icon(
+                            //                   CupertinoIcons.forward,
+                            //                 color: AppColors.primaryColor,
+                            //               )
+                            //           ),
+                            //         ],
+                            //       ),
+                            //     ),
+                            //   ),
+                            // ),
+                            // Divider(color: Colors.grey.shade300),
+                            // InkWell(
+                            //   onTap: (){},
+                            //   child: Padding(
+                            //     padding: const EdgeInsets.only(top: 10.0, bottom: 10),
+                            //     child: Row(
+                            //       mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                            //       children: [
+                            //         Row(
+                            //           children: [
+                            //             const Icon(
+                            //               Icons.help_outline,
+                            //               size: 20,
+                            //               color: AppColors.primaryColor,
+                            //             ),
+                            //             Padding(
+                            //               padding: const EdgeInsets.only(left: 8.0),
+                            //               child: Text(
+                            //                 'Help Center',
+                            //                 style: TextStyle(
+                            //                     fontSize: SizeConfig.textMultiplier * 2,
+                            //                     color: AppColors.primaryColor,
+                            //                     fontWeight: FontWeight.w500),
+                            //               ),
+                            //             ),
+                            //           ],
+                            //         ),
+                            //         Transform.scale(
+                            //             scale: 0.8,
+                            //             child:  const Icon(
+                            //                 CupertinoIcons.forward,
+                            //               color: AppColors.primaryColor,
+                            //             )
+                            //         ),
+                            //       ],
+                            //     ),
+                            //   ),
+                            // ),
+                            // Divider(color: Colors.grey.shade300),
                             InkWell(
                               onTap: (){
                                 showDialog(context: context, builder: (_) => const LogoutDialog());

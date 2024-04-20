@@ -46,6 +46,8 @@ dependencies:
   google_sign_in: ^6.2.1
   firebase_app_check: ^0.2.1+17
   another_flushbar: ^1.12.30
+  firebase_messaging: ^14.8.2
+  flutter_local_notifications: ^17.0.1
 
 dev_dependencies:
   flutter_test:
