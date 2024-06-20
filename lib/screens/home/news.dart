@@ -24,9 +24,7 @@ class _NewsPageState extends State<NewsPage> {
             padding: const EdgeInsets.only(left: 8.0, right: 8, top: 10),
             child: Column(
               crossAxisAlignment: CrossAxisAlignment.start,
-              children: [
-                Expanded(child: _newsFeed())
-              ],
+              children: [Expanded(child: _newsFeed())],
             ),
           ),
         ),
@@ -34,99 +32,95 @@ class _NewsPageState extends State<NewsPage> {
     );
   }
 
-  _newsFeed(){
+  _newsFeed() {
     return Column(
       crossAxisAlignment: CrossAxisAlignment.start,
       children: [
         Text(
           'Latest News',
-          style: TextStyle(
-              color: AppColors.primaryColor,
-              fontSize: SizeConfig.textMultiplier * 2.5,
-              fontWeight: FontWeight.bold
-          ),
+          style: TextStyle(color: AppColors.primaryColor, fontSize: SizeConfig.textMultiplier * 2.5, fontWeight: FontWeight.bold),
           textAlign: TextAlign.center,
         ),
         SizedBox(height: SizeConfig.heightMultiplier * 1),
         Expanded(
           child: StreamBuilder(
               stream: FirebaseFirestore.instance.collection('news').snapshots(),
-              builder: (context, AsyncSnapshot<QuerySnapshot> snapshot){
+              builder: (context, AsyncSnapshot<QuerySnapshot> snapshot) {
                 if (!snapshot.hasData) {
-                  return const Center(child: Center(
+                  return const Center(
+                      child: Center(
                     child: CircularProgressIndicator(
                       color: AppColors.primaryColor,
                     ),
                   ));
                 }
                 return ListView(
-                  children: snapshot.data!.docs.map((doc) {
-                    return InkWell(
-                      onTap: (){
-                        Navigator.push(context,
-                            MaterialPageRoute(
-                                builder: (_) => SingleNewsScreen(
-                                  imageUrl: doc['imageUrl'],
-                                  title: doc['title'],
-                                  description: doc['description'],
-                                )
-                            ));
-                      },
-                      child: Padding(
-                        padding: const EdgeInsets.all(8.0),
-                        child: SizedBox(
-                          width: SizeConfig.widthMultiplier * 100,
-                          height: SizeConfig.heightMultiplier * 15,
-                          child: Row (
-                            crossAxisAlignment: CrossAxisAlignment.center,
-                            children: [
-                              Container(
-                                width: SizeConfig.widthMultiplier * 40,
-                                height: SizeConfig.heightMultiplier * 20,
-                                alignment: Alignment.center,
-                                child: ClipRRect(
-                                  borderRadius: BorderRadius.circular(10),
-                                  child: Image.network(doc['imageUrl'],
-                                    fit: BoxFit.cover,
-                                    height: SizeConfig.heightMultiplier * 20,
-                                  ),
+                    children: snapshot.data!.docs.map((doc) {
+                  return InkWell(
+                    onTap: () {
+                      Navigator.push(
+                          context,
+                          MaterialPageRoute(
+                              builder: (_) => SingleNewsScreen(
+                                    imageUrl: doc['imageUrl'],
+                                    title: doc['title'],
+                                    description: doc['description'],
+                                  )));
+                    },
+                    child: Padding(
+                      padding: const EdgeInsets.all(8.0),
+                      child: SizedBox(
+                        width: SizeConfig.widthMultiplier * 100,
+                        height: SizeConfig.heightMultiplier * 15,
+                        child: Row(
+                          crossAxisAlignment: CrossAxisAlignment.center,
+                          children: [
+                            Container(
+                              width: SizeConfig.widthMultiplier * 40,
+                              height: SizeConfig.heightMultiplier * 20,
+                              child: ClipRRect(
+                                borderRadius: const BorderRadius.only(topLeft: Radius.circular(10), bottomLeft: Radius.circular(10)),
+                                child: Image.network(
+                                  doc['imageUrl'],
+                                  fit: BoxFit.cover,
+                                  width: SizeConfig.widthMultiplier * 40,
+                                  height: SizeConfig.heightMultiplier * 20,
                                 ),
                               ),
-                              Expanded(
-                                child: Padding(
-                                  padding: const EdgeInsets.only(left: 8.0),
-                                  child: Column(
-                                    crossAxisAlignment: CrossAxisAlignment.start,
-                                    children: [
-                                      Text(
-                                        doc['title'],
+                            ),
+                            Expanded(
+                              child: Padding(
+                                padding: const EdgeInsets.only(left: 8.0),
+                                child: Column(
+                                  crossAxisAlignment: CrossAxisAlignment.start,
+                                  children: [
+                                    Text(
+                                      doc['title'],
+                                      style: TextStyle(
+                                          color: AppColors.primaryColor.withOpacity(0.5),
+                                          fontSize: SizeConfig.textMultiplier * 2,
+                                          fontWeight: FontWeight.bold),
+                                    ),
+                                    SizedBox(height: SizeConfig.heightMultiplier * 1),
+                                    Expanded(
+                                      child: Text(
+                                        '${getFirstTenWords(doc['description'])} ...',
                                         style: TextStyle(
-                                            color: AppColors.primaryColor.withOpacity(0.5),
-                                            fontSize: SizeConfig.textMultiplier * 2,
-                                            fontWeight: FontWeight.bold
+                                          color: AppColors.primaryColor,
+                                          fontSize: SizeConfig.textMultiplier * 1.8,
                                         ),
                                       ),
-                                      SizedBox(height: SizeConfig.heightMultiplier * 1),
-                                      Expanded(
-                                        child: Text(
-                                          getFirstTenWords(doc['description']),
-                                          style: TextStyle(
-                                            color: AppColors.primaryColor,
-                                            fontSize: SizeConfig.textMultiplier * 2,
-                                          ),
-                                        ),
-                                      ),
-                                    ],
-                                  ),
+                                    ),
+                                  ],
                                 ),
                               ),
-                            ],
-                          ),
+                            ),
+                          ],
                         ),
                       ),
-                    );
-                  }).toList()
-                );
+                    ),
+                  );
+                }).toList());
               }),
         )
       ],

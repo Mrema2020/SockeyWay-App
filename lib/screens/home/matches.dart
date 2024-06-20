@@ -1,8 +1,10 @@
 import 'package:cloud_firestore/cloud_firestore.dart';
+import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
 
 import '../../../utils/colors.dart';
 import '../../../utils/size_config.dart';
+import '../tickets/buy_ticket.dart';
 
 class MatchesPage extends StatefulWidget {
   const MatchesPage({super.key});
@@ -13,6 +15,7 @@ class MatchesPage extends StatefulWidget {
 
 class _MatchesPageState extends State<MatchesPage> {
   final FirebaseFirestore _firestore = FirebaseFirestore.instance;
+  User? user = FirebaseAuth.instance.currentUser;
 
   @override
   Widget build(BuildContext context) {
@@ -22,44 +25,75 @@ class _MatchesPageState extends State<MatchesPage> {
           height: SizeConfig.heightMultiplier * 100,
           width: SizeConfig.widthMultiplier * 100,
           child: Column(
-            children: [
-              Expanded(child: _fixtures())
-            ],
+            children: [Expanded(child: _fixtures())],
           ),
         ),
       ),
     );
   }
 
-  _fixtures(){
+  _fixtures() {
     return Padding(
-      padding:  const EdgeInsets.only(left: 15.0, right: 15, top: 15),
+      padding: const EdgeInsets.only(left: 15.0, right: 15, top: 15),
       child: Column(
         crossAxisAlignment: CrossAxisAlignment.start,
         children: [
-          Center(
-            child: Text(
-              'Fixtures',
-              style: TextStyle(
-                  color: AppColors.primaryColor,
-                  fontSize: SizeConfig.textMultiplier * 2.5,
-                  fontWeight: FontWeight.bold
-              ),
+          Padding(
+            padding: const EdgeInsets.all(12.0),
+            child: Row(
+              mainAxisAlignment: MainAxisAlignment.spaceBetween,
+              children: [
+                Text(
+                  'Fixtures',
+                  style: TextStyle(
+                    color: AppColors.primaryColor,
+                    fontSize: SizeConfig.textMultiplier * 2.5,
+                    fontWeight: FontWeight.bold,
+                  ),
+                ),
+                user!.photoURL == 'Player'
+                    ? Container()
+                    : TextButton(
+                        onPressed: () {
+                          Navigator.push(
+                            context,
+                            MaterialPageRoute(
+                              builder: (_) => TicketPurchasePage(),
+                            ),
+                          );
+                        },
+                        child: Container(
+                          height: SizeConfig.heightMultiplier * 6,
+                          width: SizeConfig.widthMultiplier * 25,
+                          decoration: BoxDecoration(color: AppColors.primaryColor, borderRadius: BorderRadius.circular(10)),
+                          child: Center(
+                            child: Text(
+                              'Buy Ticket',
+                              style: TextStyle(
+                                color: Colors.white,
+                                fontSize: SizeConfig.textMultiplier * 1.7,
+                                fontWeight: FontWeight.bold,
+                              ),
+                            ),
+                          ),
+                        ),
+                      ),
+              ],
             ),
           ),
           SizedBox(height: SizeConfig.heightMultiplier * 1),
           Expanded(
             child: StreamBuilder<QuerySnapshot>(
               stream: _firestore.collection('matches').snapshots(),
-              builder: (context, snapshot){
+              builder: (context, snapshot) {
                 if (snapshot.connectionState == ConnectionState.waiting) {
                   return const Center(child: CircularProgressIndicator());
                 }
-            
+
                 if (snapshot.hasError) {
                   return Center(child: Text('Error: ${snapshot.error}'));
                 }
-            
+
                 if (!snapshot.hasData || snapshot.data!.docs.isEmpty) {
                   return const Center(child: Text('No matches available'));
                 }
@@ -69,9 +103,7 @@ class _MatchesPageState extends State<MatchesPage> {
                       padding: const EdgeInsets.only(bottom: 18.0),
                       child: Container(
                         height: SizeConfig.heightMultiplier * 18,
-                        decoration: BoxDecoration(
-                            color: AppColors.primaryColor,
-                            borderRadius: BorderRadius.circular(10)),
+                        decoration: BoxDecoration(color: AppColors.primaryColor.withOpacity(0.1), borderRadius: BorderRadius.circular(10)),
                         child: Padding(
                           padding: const EdgeInsets.all(8.0),
                           child: Stack(
@@ -86,17 +118,17 @@ class _MatchesPageState extends State<MatchesPage> {
                                     mainAxisAlignment: MainAxisAlignment.spaceBetween,
                                     children: [
                                       Text(
-                                        doc['date'].toString().substring(0,10),
+                                        doc['date'].toString().substring(0, 10),
                                         style: TextStyle(
-                                          color: AppColors.textColor,
+                                          color: AppColors.primaryColor,
                                           fontSize: SizeConfig.textMultiplier * 1.5,
                                         ),
                                         textAlign: TextAlign.center,
                                       ),
                                       Text(
-                                        doc['time'].toString().substring(10,15),
+                                        doc['time'].toString().substring(10, 15),
                                         style: TextStyle(
-                                          color: AppColors.textColor,
+                                          color: AppColors.primaryColor,
                                           fontSize: SizeConfig.textMultiplier * 1.5,
                                         ),
                                         textAlign: TextAlign.center,
@@ -118,9 +150,8 @@ class _MatchesPageState extends State<MatchesPage> {
                                         child: Text(
                                           doc['home_team'],
                                           style: TextStyle(
-                                              color: AppColors.textColor,
-                                              fontSize:
-                                              SizeConfig.textMultiplier * 2.5,
+                                              color: AppColors.primaryColor,
+                                              fontSize: SizeConfig.textMultiplier * 2.5,
                                               fontWeight: FontWeight.bold),
                                           textAlign: TextAlign.center,
                                         ),
@@ -130,7 +161,7 @@ class _MatchesPageState extends State<MatchesPage> {
                                         child: Text(
                                           'Vs',
                                           style: TextStyle(
-                                            color: AppColors.textColor,
+                                            color: AppColors.primaryColor,
                                             fontSize: SizeConfig.textMultiplier * 2,
                                           ),
                                           textAlign: TextAlign.center,
@@ -141,9 +172,8 @@ class _MatchesPageState extends State<MatchesPage> {
                                         child: Text(
                                           doc['away_team'],
                                           style: TextStyle(
-                                              color: AppColors.textColor,
-                                              fontSize:
-                                              SizeConfig.textMultiplier * 2.5,
+                                              color: AppColors.primaryColor,
+                                              fontSize: SizeConfig.textMultiplier * 2.5,
                                               fontWeight: FontWeight.bold),
                                           textAlign: TextAlign.center,
                                         ),

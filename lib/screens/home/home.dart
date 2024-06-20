@@ -3,8 +3,10 @@ import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
+import 'package:sockeyway/screens/upload_cv.dart';
 import 'package:sockeyway/utils/size_config.dart';
 
+import '../../local_notification_services.dart';
 import '../../utils/colors.dart';
 import '../dialogs/dialo_builder.dart';
 
@@ -17,16 +19,14 @@ class HomePage extends StatefulWidget {
 }
 
 class _HomePageState extends State<HomePage> {
-
   User? user = FirebaseAuth.instance.currentUser;
   final FirebaseFirestore _firestore = FirebaseFirestore.instance;
   final TextEditingController _commentController = TextEditingController();
   String? postId;
   bool isLoading = false;
-
-
   @override
   void initState() {
+    LocalNotificationService().showNotificationAndroid("SockeyWay", "View posts, matches and news");
     super.initState();
   }
 
@@ -63,39 +63,64 @@ class _HomePageState extends State<HomePage> {
           children: [
             Padding(
               padding: const EdgeInsets.only(bottom: 5.0),
-              child: Text(
-                'Sockeyway App',
-                style: TextStyle(
-                  color: AppColors.primaryColor,
-                  fontSize: SizeConfig.textMultiplier * 2.5,
-                ),
-                textAlign: TextAlign.center,
-              ),
+              child: user!.photoURL == 'Player'
+                  ? Container(
+                      width: SizeConfig.widthMultiplier * 30,
+                      height: SizeConfig.heightMultiplier * 4.3,
+                      decoration: BoxDecoration(color: AppColors.primaryColor, borderRadius: BorderRadius.circular(10)),
+                      child: TextButton(
+                        onPressed: () {
+                          Navigator.push(
+                            context,
+                            MaterialPageRoute(
+                              builder: (_) => UploadCv(),
+                            ),
+                          );
+                        },
+                        child: Center(
+                          child: Text(
+                            'Upload Cv',
+                            style: TextStyle(
+                              color: Colors.white,
+                              fontSize: SizeConfig.textMultiplier * 1.8,
+                            ),
+                            textAlign: TextAlign.center,
+                          ),
+                        ),
+                      ),
+                    )
+                  : Text(
+                      'Sockeyway App',
+                      style: TextStyle(
+                        color: AppColors.primaryColor,
+                        fontSize: SizeConfig.textMultiplier * 2.5,
+                      ),
+                      textAlign: TextAlign.center,
+                    ),
             ),
             Row(
               children: [
                 Padding(
                   padding: const EdgeInsets.only(right: 8.0),
                   child: user == null
-                    ? Text(
-                    'Hamis',
-                    style: TextStyle(
-                      color: AppColors.primaryColor,
-                      fontSize: SizeConfig.textMultiplier * 3.5,
-                      fontWeight: FontWeight.bold,
-                    ),
-                    textAlign: TextAlign.center,
-                  ) :
-                  Text(
-                    '${user?.displayName}',
-                    style: TextStyle(
-                      color: AppColors.primaryColor,
-                      fontSize: SizeConfig.textMultiplier * 3.5,
-                      fontWeight: FontWeight.bold,
-                    ),
-                    textAlign: TextAlign.center,
-                  )
-                  ,
+                      ? Text(
+                          'Hamis',
+                          style: TextStyle(
+                            color: AppColors.primaryColor,
+                            fontSize: SizeConfig.textMultiplier * 3.5,
+                            fontWeight: FontWeight.bold,
+                          ),
+                          textAlign: TextAlign.center,
+                        )
+                      : Text(
+                          '${user?.displayName}',
+                          style: TextStyle(
+                            color: AppColors.primaryColor,
+                            fontSize: SizeConfig.textMultiplier * 3.5,
+                            fontWeight: FontWeight.bold,
+                          ),
+                          textAlign: TextAlign.center,
+                        ),
                 ),
                 const Icon(
                   CupertinoIcons.person_alt_circle,
@@ -119,7 +144,7 @@ class _HomePageState extends State<HomePage> {
         SizedBox(height: SizeConfig.heightMultiplier * 1),
         StreamBuilder<QuerySnapshot>(
           stream: _firestore.collection('matches').snapshots(),
-          builder: (context, snapshot){
+          builder: (context, snapshot) {
             if (snapshot.connectionState == ConnectionState.waiting) {
               return const Center(child: CircularProgressIndicator());
             }
@@ -140,9 +165,7 @@ class _HomePageState extends State<HomePage> {
                     padding: const EdgeInsets.only(right: 18.0),
                     child: Container(
                       height: SizeConfig.heightMultiplier * 18,
-                      decoration: BoxDecoration(
-                          color: AppColors.primaryColor,
-                          borderRadius: BorderRadius.circular(10)),
+                      decoration: BoxDecoration(color: AppColors.primaryColor, borderRadius: BorderRadius.circular(10)),
                       child: Padding(
                         padding: const EdgeInsets.all(8.0),
                         child: Stack(
@@ -157,7 +180,7 @@ class _HomePageState extends State<HomePage> {
                                   mainAxisAlignment: MainAxisAlignment.spaceBetween,
                                   children: [
                                     Text(
-                                      doc['date'].toString().substring(0,10),
+                                      doc['date'].toString().substring(0, 10),
                                       style: TextStyle(
                                         color: AppColors.textColor,
                                         fontSize: SizeConfig.textMultiplier * 1.5,
@@ -165,7 +188,7 @@ class _HomePageState extends State<HomePage> {
                                       textAlign: TextAlign.center,
                                     ),
                                     Text(
-                                      doc['time'].toString().substring(10,15),
+                                      doc['time'].toString().substring(10, 15),
                                       style: TextStyle(
                                         color: AppColors.textColor,
                                         fontSize: SizeConfig.textMultiplier * 1.5,
@@ -190,8 +213,7 @@ class _HomePageState extends State<HomePage> {
                                         doc['home_team'],
                                         style: TextStyle(
                                             color: AppColors.textColor,
-                                            fontSize:
-                                            SizeConfig.textMultiplier * 2.5,
+                                            fontSize: SizeConfig.textMultiplier * 2.5,
                                             fontWeight: FontWeight.bold),
                                         textAlign: TextAlign.center,
                                       ),
@@ -213,8 +235,7 @@ class _HomePageState extends State<HomePage> {
                                         doc['away_team'],
                                         style: TextStyle(
                                             color: AppColors.textColor,
-                                            fontSize:
-                                            SizeConfig.textMultiplier * 2.5,
+                                            fontSize: SizeConfig.textMultiplier * 2.5,
                                             fontWeight: FontWeight.bold),
                                         textAlign: TextAlign.center,
                                       ),
@@ -246,154 +267,131 @@ class _HomePageState extends State<HomePage> {
             alignment: Alignment.topLeft,
             child: Text(
               'Posts',
-              style: TextStyle(
-                  color: AppColors.primaryColor,
-                  fontSize: SizeConfig.textMultiplier * 2.5,
-                  fontWeight: FontWeight.bold),
+              style: TextStyle(color: AppColors.primaryColor, fontSize: SizeConfig.textMultiplier * 2.5, fontWeight: FontWeight.bold),
               textAlign: TextAlign.center,
             ),
           ),
         ),
         Expanded(
-          child: StreamBuilder<QuerySnapshot>(
-            stream: _firestore.collection('posts').snapshots(),
-            builder: (context, snapshot){
-              if (snapshot.connectionState == ConnectionState.waiting) {
-                return const Center(child: CircularProgressIndicator());
-              }
+            child: StreamBuilder<QuerySnapshot>(
+          stream: _firestore.collection('posts').snapshots(),
+          builder: (context, snapshot) {
+            if (snapshot.connectionState == ConnectionState.waiting) {
+              return const Center(child: CircularProgressIndicator());
+            }
 
-              if (snapshot.hasError) {
-                return Center(child: Text('Error: ${snapshot.error}'));
-              }
+            if (snapshot.hasError) {
+              return Center(child: Text('Error: ${snapshot.error}'));
+            }
 
-              if (!snapshot.hasData || snapshot.data!.docs.isEmpty) {
-                return const Center(child: Text('No posts available'));
-              }
-              return ListView(
-                children: snapshot.data!.docs.map((doc) {
-                  return Padding(
-                    padding: const EdgeInsets.only(top: 8.0),
-                    child: Container(
-                      width: SizeConfig.widthMultiplier * 100,
-                      decoration: BoxDecoration(
-                          borderRadius: BorderRadius.circular(10),
-                          border: Border.all(color: Colors.grey.shade300)),
-                      child: Column(
-                        crossAxisAlignment: CrossAxisAlignment.start,
-                        children: [
-                          ClipRRect(
-                            borderRadius: const BorderRadius.only(
-                                topLeft: Radius.circular(10),
-                                topRight: Radius.circular(10)),
-                            child: Container(
-                              height: SizeConfig.heightMultiplier * 30,
-                              width: SizeConfig.widthMultiplier * 100,
-                              decoration: BoxDecoration(
-                                  image: DecorationImage(
-                                      image: NetworkImage(doc['imageUrl']),
-                                      fit: BoxFit.cover)),
-                            ),
+            if (!snapshot.hasData || snapshot.data!.docs.isEmpty) {
+              return const Center(child: Text('No posts available'));
+            }
+            return ListView(
+              children: snapshot.data!.docs.map((doc) {
+                return Padding(
+                  padding: const EdgeInsets.only(top: 8.0),
+                  child: Container(
+                    width: SizeConfig.widthMultiplier * 100,
+                    decoration: BoxDecoration(borderRadius: BorderRadius.circular(10), border: Border.all(color: Colors.grey.shade300)),
+                    child: Column(
+                      crossAxisAlignment: CrossAxisAlignment.start,
+                      children: [
+                        ClipRRect(
+                          borderRadius: const BorderRadius.only(topLeft: Radius.circular(10), topRight: Radius.circular(10)),
+                          child: Container(
+                            height: SizeConfig.heightMultiplier * 30,
+                            width: SizeConfig.widthMultiplier * 100,
+                            decoration: BoxDecoration(image: DecorationImage(image: NetworkImage(doc['imageUrl']), fit: BoxFit.cover)),
                           ),
-                          Padding(
-                            padding: const EdgeInsets.all(8.0),
-                            child: RichText(
-                              text: TextSpan(
-                                children: <TextSpan>[
-                                  TextSpan(
-                                    text: 'Sockeyway ',
-                                    style: TextStyle(
-                                        color: AppColors.primaryColor,
-                                      fontSize: SizeConfig.textMultiplier * 1.5,
-                                        fontWeight: FontWeight.bold),
-                                  ),
-                                  TextSpan(
-                                    text:doc['description'],
-                                    style: TextStyle(
+                        ),
+                        Padding(
+                          padding: const EdgeInsets.all(8.0),
+                          child: RichText(
+                            text: TextSpan(
+                              children: <TextSpan>[
+                                TextSpan(
+                                  text: 'Sockeyway ',
+                                  style: TextStyle(
                                       color: AppColors.primaryColor,
                                       fontSize: SizeConfig.textMultiplier * 1.5,
-                                    ),
+                                      fontWeight: FontWeight.bold),
+                                ),
+                                TextSpan(
+                                  text: doc['description'],
+                                  style: TextStyle(
+                                    color: AppColors.primaryColor,
+                                    fontSize: SizeConfig.textMultiplier * 1.5,
                                   ),
-                                ],
-                              ),
+                                ),
+                              ],
                             ),
                           ),
-                          StreamBuilder<QuerySnapshot>(
-                              stream: _firestore.collection("posts").doc(doc.id).collection('comments').snapshots(),
-                              builder: (context, snapshot){
-                                if (snapshot.connectionState == ConnectionState.waiting) {
-                                  return Center(child: Container());
-                                }
+                        ),
+                        StreamBuilder<QuerySnapshot>(
+                            stream: _firestore.collection("posts").doc(doc.id).collection('comments').snapshots(),
+                            builder: (context, snapshot) {
+                              if (snapshot.connectionState == ConnectionState.waiting) {
+                                return Center(child: Container());
+                              }
 
-                                if (snapshot.hasError) {
-                                  return Center(child: Container());
-                                }
+                              if (snapshot.hasError) {
+                                return Center(child: Container());
+                              }
 
-                                if (!snapshot.hasData || snapshot.data!.docs.isEmpty) {
-                                  return Padding(
-                                    padding: const EdgeInsets.only(left: 8.0, bottom: 5),
-                                    child: Text('${snapshot.data!.docs.length} comments',
-                                      style: TextStyle(
-                                          color: AppColors.primaryColor.withOpacity(0.4),
-                                          fontSize: SizeConfig.textMultiplier * 2,
-                                          fontWeight: FontWeight.bold
-                                      ),
-                                    ),
-                                  );
-                                }
+                              if (!snapshot.hasData || snapshot.data!.docs.isEmpty) {
                                 return Padding(
-                                  padding: const EdgeInsets.only(left: 8.0),
+                                  padding: const EdgeInsets.only(left: 8.0, bottom: 5),
                                   child: Text(
-                                    "${snapshot.data!.docs.length} Comments",
+                                    '${snapshot.data!.docs.length} comments',
                                     style: TextStyle(
-                                        color: AppColors.primaryColor.withOpacity(0.5),
+                                        color: AppColors.primaryColor.withOpacity(0.4),
                                         fontSize: SizeConfig.textMultiplier * 2,
-                                        fontWeight: FontWeight.bold
-                                    ),
+                                        fontWeight: FontWeight.bold),
                                   ),
                                 );
                               }
-                          ),
-
-                          Padding(
-                            padding: const EdgeInsets.all(8.0),
-                            child: Container(
-                              height: SizeConfig.heightMultiplier * 4.5,
-                              decoration:   BoxDecoration(
-                                color: AppColors.primaryColor,
-                                borderRadius: BorderRadius.circular(5)
-                              ),
-                              child: TextButton(
-                                onPressed: (){
-                                  showBottomSheet(
-                                      context: context,
-                                      builder: (_) => _commentSection(doc.id)
-                                  );
-                                },
+                              return Padding(
+                                padding: const EdgeInsets.only(left: 8.0),
                                 child: Text(
-                                  "Comment",
+                                  "${snapshot.data!.docs.length} Comments",
                                   style: TextStyle(
-                                      color: AppColors.textColor,
+                                      color: AppColors.primaryColor.withOpacity(0.5),
                                       fontSize: SizeConfig.textMultiplier * 2,
-                                      fontWeight: FontWeight.bold
-                                  ),
+                                      fontWeight: FontWeight.bold),
                                 ),
+                              );
+                            }),
+                        Padding(
+                          padding: const EdgeInsets.all(8.0),
+                          child: Container(
+                            height: SizeConfig.heightMultiplier * 4.5,
+                            decoration: BoxDecoration(color: AppColors.primaryColor, borderRadius: BorderRadius.circular(5)),
+                            child: TextButton(
+                              onPressed: () {
+                                showBottomSheet(context: context, builder: (_) => _commentSection(doc.id));
+                              },
+                              child: Text(
+                                "Comment",
+                                style: TextStyle(
+                                    color: AppColors.textColor, fontSize: SizeConfig.textMultiplier * 2, fontWeight: FontWeight.bold),
                               ),
                             ),
                           ),
-                        ],
-                      ),
+                        ),
+                      ],
                     ),
-                  );
-                }).toList(),
+                  ),
                 );
-            },
-          )
-        )
+              }).toList(),
+            );
+          },
+        ))
       ],
     );
   }
 
-  _commentSection(postId){
+  _commentSection(postId) {
     return SizedBox(
       width: SizeConfig.widthMultiplier * 100,
       child: Stack(
@@ -408,7 +406,7 @@ class _HomePageState extends State<HomePage> {
                   height: SizeConfig.heightMultiplier * 0.3,
                   color: AppColors.primaryColor.withOpacity(0.5),
                 ),
-                SizedBox( height: SizeConfig.heightMultiplier * 1),
+                SizedBox(height: SizeConfig.heightMultiplier * 1),
                 Text(
                   'Comments',
                   style: TextStyle(
@@ -422,12 +420,12 @@ class _HomePageState extends State<HomePage> {
           SingleChildScrollView(
             child: Column(
               children: [
-                SizedBox( height: SizeConfig.heightMultiplier * 5),
+                SizedBox(height: SizeConfig.heightMultiplier * 5),
                 Padding(
                   padding: const EdgeInsets.all(8.0),
                   child: StreamBuilder<QuerySnapshot>(
                     stream: _firestore.collection("posts").doc(postId).collection('comments').snapshots(),
-                    builder: (context, snapshot){
+                    builder: (context, snapshot) {
                       if (snapshot.connectionState == ConnectionState.waiting) {
                         return const Center(child: CircularProgressIndicator());
                       }
@@ -437,57 +435,53 @@ class _HomePageState extends State<HomePage> {
                       }
 
                       if (!snapshot.hasData || snapshot.data!.docs.isEmpty) {
-                        return Center(child: Text('No comment',
-                            style: TextStyle(
-                                fontSize: SizeConfig.textMultiplier * 2,
-                                color: AppColors.primaryColor.withOpacity(0.5),
-                                fontWeight: FontWeight.bold)
-                        ));
+                        return Center(
+                            child: Text('No comment',
+                                style: TextStyle(
+                                    fontSize: SizeConfig.textMultiplier * 2,
+                                    color: AppColors.primaryColor.withOpacity(0.5),
+                                    fontWeight: FontWeight.bold)));
                       }
                       return SizedBox(
                         height: SizeConfig.heightMultiplier * 30,
                         child: ListView(
-                          children: snapshot.data!.docs.map((doc) {
-                            return  Column(
-                              children: [
-                                Row(
-                                  crossAxisAlignment: CrossAxisAlignment.start,
-                                  children: [
-                                    Padding(
-                                      padding: const EdgeInsets.only(right: 8.0),
-                                      child: Icon(CupertinoIcons.person_alt_circle,
-                                        color: AppColors.primaryColor.withOpacity(0.7),
-                                      ),
+                            children: snapshot.data!.docs.map((doc) {
+                          return Column(
+                            children: [
+                              Row(
+                                crossAxisAlignment: CrossAxisAlignment.start,
+                                children: [
+                                  Padding(
+                                    padding: const EdgeInsets.only(right: 8.0),
+                                    child: Icon(
+                                      CupertinoIcons.person_alt_circle,
+                                      color: AppColors.primaryColor.withOpacity(0.7),
                                     ),
-                                    Expanded(
-                                      child: Column(
-                                        crossAxisAlignment: CrossAxisAlignment.start,
-                                        children: [
-                                          Text(
-                                            doc['username'],
-                                            style: TextStyle(
-                                                color: AppColors.primaryColor,
-                                                fontSize: SizeConfig.textMultiplier * 1.8,
-                                                fontWeight: FontWeight.bold
-                                            ),
-                                          ),
-                                          Text(
-                                            doc['text'],
-                                            style: TextStyle(
-                                                color: AppColors.primaryColor,
-                                                fontSize: SizeConfig.textMultiplier * 1.8
-                                            ),
-                                            textAlign: TextAlign.start,
-                                          ),
-                                        ],
-                                      ),
+                                  ),
+                                  Expanded(
+                                    child: Column(
+                                      crossAxisAlignment: CrossAxisAlignment.start,
+                                      children: [
+                                        Text(
+                                          doc['username'],
+                                          style: TextStyle(
+                                              color: AppColors.primaryColor,
+                                              fontSize: SizeConfig.textMultiplier * 1.8,
+                                              fontWeight: FontWeight.bold),
+                                        ),
+                                        Text(
+                                          doc['text'],
+                                          style: TextStyle(color: AppColors.primaryColor, fontSize: SizeConfig.textMultiplier * 1.8),
+                                          textAlign: TextAlign.start,
+                                        ),
+                                      ],
                                     ),
-                                  ],
-                                ),
-                              ],
-                            );
-                          }).toList()
-                        ),
+                                  ),
+                                ],
+                              ),
+                            ],
+                          );
+                        }).toList()),
                       );
                     },
                   ),
@@ -495,15 +489,16 @@ class _HomePageState extends State<HomePage> {
                 Padding(
                   padding: const EdgeInsets.all(10.0),
                   child: SizedBox(
-                    width: SizeConfig.widthMultiplier * 100,
+                      width: SizeConfig.widthMultiplier * 100,
                       child: Center(
                         child: Row(
                           crossAxisAlignment: CrossAxisAlignment.end,
                           children: [
                             Padding(
                               padding: const EdgeInsets.only(right: 8.0),
-                              child: Icon(CupertinoIcons.person_alt_circle,
-                              color: AppColors.primaryColor.withOpacity(0.7),
+                              child: Icon(
+                                CupertinoIcons.person_alt_circle,
+                                color: AppColors.primaryColor.withOpacity(0.7),
                               ),
                             ),
                             Expanded(
@@ -513,19 +508,13 @@ class _HomePageState extends State<HomePage> {
                                   controller: _commentController,
                                   decoration: InputDecoration(
                                     hintStyle: TextStyle(
-                                        fontSize: SizeConfig.textMultiplier * 1.8,
-                                        color: AppColors.primaryColor
-                                            .withOpacity(0.6)),
+                                        fontSize: SizeConfig.textMultiplier * 1.8, color: AppColors.primaryColor.withOpacity(0.6)),
                                     hintText: 'Add Comment for sockeyway',
                                     enabledBorder: UnderlineInputBorder(
-                                      borderSide: BorderSide(
-                                          color: AppColors.primaryColor
-                                              .withOpacity(0.1)),
+                                      borderSide: BorderSide(color: AppColors.primaryColor.withOpacity(0.1)),
                                     ),
                                     focusedBorder: UnderlineInputBorder(
-                                      borderSide: BorderSide(
-                                          color: AppColors.primaryColor
-                                              .withOpacity(0.2)),
+                                      borderSide: BorderSide(color: AppColors.primaryColor.withOpacity(0.2)),
                                     ),
                                   ),
                                 ),
@@ -534,28 +523,24 @@ class _HomePageState extends State<HomePage> {
                             Padding(
                               padding: const EdgeInsets.only(left: 8.0),
                               child: GestureDetector(
-                                onTap: (){
+                                onTap: () {
                                   _validate(postId);
                                 },
                                 child: Container(
                                   height: SizeConfig.heightMultiplier * 4.5,
                                   width: SizeConfig.widthMultiplier * 25,
-                                  decoration: BoxDecoration(
-                                      color: AppColors.primaryColor,
-                                      borderRadius: BorderRadius.circular(5)
-                                  ),
+                                  decoration: BoxDecoration(color: AppColors.primaryColor, borderRadius: BorderRadius.circular(5)),
                                   child: isLoading
                                       ? const Center(child: CircularProgressIndicator(color: AppColors.textColor))
                                       : Center(
-                                    child: Text(
-                                      "Post",
-                                      style: TextStyle(
-                                          color: AppColors.textColor,
-                                          fontSize: SizeConfig.textMultiplier * 2,
-                                          fontWeight: FontWeight.bold
-                                      ),
-                                    ),
-                                  ),
+                                          child: Text(
+                                            "Post",
+                                            style: TextStyle(
+                                                color: AppColors.textColor,
+                                                fontSize: SizeConfig.textMultiplier * 2,
+                                                fontWeight: FontWeight.bold),
+                                          ),
+                                        ),
                                 ),
                               ),
                             ),
@@ -574,8 +559,8 @@ class _HomePageState extends State<HomePage> {
     );
   }
 
-  _validate(postId){
-    if(_commentController.text.trim() == ""){
+  _validate(postId) {
+    if (_commentController.text.trim() == "") {
       Flushbar(
         title: "Error",
         message: "Please provide your comment",
@@ -588,12 +573,12 @@ class _HomePageState extends State<HomePage> {
           color: Colors.white,
         ),
       ).show(context);
-    }else{
+    } else {
       _addComment(_commentController.text, postId);
     }
   }
 
-  Future<void> _addComment(String commentText, String postId, ) async {
+  Future<void> _addComment(String commentText, String postId) async {
     try {
       DialogBuilder(context).showLoadingIndicator('Posting..');
       final user = FirebaseAuth.instance.currentUser;
@@ -617,6 +602,4 @@ class _HomePageState extends State<HomePage> {
       // Handle error
     }
   }
-
 }
-
